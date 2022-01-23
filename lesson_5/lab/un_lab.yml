@@ -1,0 +1,20 @@
+---
+- hosts: db
+  vars:
+    remote_dir: /etc/ansible/facts.d
+    facts_file: lab_localfacts.fact
+  tasks:
+    - name: stop {{ ansible_local['lab_localfacts']['db']['service'] }}
+      service:
+          name: "{{ ansible_local['lab_localfacts']['db']['service'] }}"
+          state: stopped
+      become: yes
+    - name: ensure {{ ansible_local['lab_localfacts']['db']['package'] }} is not installed
+      apt:
+        name: "{{ ansible_local['lab_localfacts']['db']['package'] }}"
+        state: absent
+      become: yes
+    - name: delete the custom facts
+      file:
+        state: absent
+        path: "{{ remote_dir + '/' + facts_file }}"

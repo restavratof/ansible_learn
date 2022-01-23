@@ -1,0 +1,4 @@
+[db]
+package = mariadb
+service = mysql
+is_state = true

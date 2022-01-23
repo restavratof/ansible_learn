@@ -1,0 +1,10 @@
+---
+- name: configure web services
+  hosts: web
+  tasks:
+    - name: Create directory {{dir_name}}
+      debug:
+        msg: "Creating {{dir_name}}"
+    - name: Create file {{file_name}}
+      debug:
+        msg: "Creating {{file_name}}"

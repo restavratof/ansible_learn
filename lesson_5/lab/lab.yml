@@ -1,0 +1,44 @@
+---
+- name: install custom facts
+  hosts: db
+  vars:
+    remote_dir: /etc/ansible/facts.d
+    facts_file: lab_localfacts.fact
+  tasks:
+    - name: create fact directory
+      file:
+        state: directory
+        recurse: yes
+        path: "{{ remote_dir }}"
+    - name: install new facts
+      copy:
+        src: "{{ facts_file }}"
+        dest: "{{ remote_dir }}"
+#    - name: verify facts installation
+#      debug:
+#        msg: "verification result: {{lookup('file', remote_dir + '/' + facts_file) }}"
+
+- name: install and enable mariadb
+  hosts: db
+  tasks:
+    - name: Show custom facts
+      debug:
+        msg: |
+          Package: {{ ansible_local['lab_localfacts']['db']['package'] }}
+          Service: {{ ansible_local['lab_localfacts']['db']['service'] }}
+          IsEnabled: {{ ansible_local['lab_localfacts']['db']['is_state'] }}
+    - name: install {{ ansible_local['lab_localfacts']['db']['package'] }}
+      apt:
+        name:
+          - "{{ ansible_local['lab_localfacts']['db']['package'] + '-server' }}"
+          - "{{ ansible_local['lab_localfacts']['db']['package'] + '-client' }}"
+        state: latest
+      become: true
+    - name: start {{ ansible_local['lab_localfacts']['db']['service'] }}
+      service:
+        name: "{{ ansible_local['lab_localfacts']['db']['service'] }}"
+        enabled: "{{ ansible_local['lab_localfacts']['db']['is_state'] }}"
+        state: started
+
+
+
