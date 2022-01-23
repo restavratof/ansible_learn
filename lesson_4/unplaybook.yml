@@ -1,0 +1,25 @@
+---
+- hosts: all
+  tasks:
+    - name: delete the content of the web site
+      file:
+        state: absent
+        path: /home/ansible/static-site
+    - name: delete symlink
+      file:
+        state: absent
+        path: /etc/nginx/sites-enabled/default
+      become: yes
+    - name: delete the nginx config file
+      file:
+        state: absent
+        dest: /etc/nginx/sites-available/static_site.cfg
+      become: yes
+    - name: stop nginx
+      service:
+          name: nginx
+          state: stopped
+      become: yes
+    - name: ensure nginx is not installed
+      apt: name=nginx state=absent
+      become: yes
