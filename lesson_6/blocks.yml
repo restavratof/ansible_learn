@@ -1,0 +1,16 @@
+- name: simple block example
+  hosts: web
+  tasks:
+    - name: setting up nginx
+      block:
+      - name: install nginx
+        apt:
+          name: nginx
+          state: present
+        become: yes
+      - name: restart nginx
+        service:
+          name: nginx
+          state: restarted
+        become: yes
+      when: ansible_distribution == "Debian"

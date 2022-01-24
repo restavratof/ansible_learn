@@ -1,0 +1,32 @@
+---
+- name: failed_when demo
+  hosts: db
+  vars:
+    mysql_root_password: "12345"
+  tasks:
+    - name: setting up mariadb
+      block:
+        - name: Install mariadb
+          apt:
+            name:
+              - mariadb-server
+              - python3-pymysql
+            state: latest
+          become: yes
+        - name: start mariadb
+          service:
+            name: mariadb
+            state: started
+          become: yes
+          notify:
+            - mariadb_root_psw
+      when: ansible_distribution == "Debian"
+  handlers:
+    - name: mariadb_root_psw
+      mysql_user:
+        login_user: root
+        login_password: "{{ mysql_root_password }}"
+        user: root
+        check_implicit_admin: true
+        password: "{{ mysql_root_password }}"
+      become: yes

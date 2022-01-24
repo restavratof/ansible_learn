@@ -1,0 +1,10 @@
+---
+- name: multiple when demo
+  hosts: web
+  tasks:
+    - name: Create directory dir1
+      debug:
+        msg: "Creating dir1"
+      when:
+        - ansible_distribution == "Ubuntu"
+        - ansible_memfree_mb > 512

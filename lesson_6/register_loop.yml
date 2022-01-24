@@ -1,0 +1,13 @@
+---
+- name: register demo
+  hosts: ansible1
+  tasks:
+    - name: show loop register
+      shell: "echo {{ item }}"
+      loop:
+        - "one"
+        - "two"
+      register: echo
+    - name: show reguster results
+      debug:
+        var: echo

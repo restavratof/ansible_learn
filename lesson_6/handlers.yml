@@ -1,0 +1,38 @@
+---
+- hosts: web
+  force_handlers: True
+  vars:
+    local_dir: /home/dfashch/PycharmProjects/ansible_learn/lesson_6
+    site_file: /etc/nginx/sites-available/static_site.cfg
+  tasks:
+    - name: ensure nginx is at the latest version
+      apt: name=nginx state=latest
+      become: yes
+    - name: start nginx
+      service:
+          name: nginx
+          state: started
+      become: yes
+    - name: copy the nginx config file
+      copy:
+        src: "{{ local_dir + '/static_site.cfg' }}"
+        dest: "{{ site_file }}"
+      become: yes
+    - name: create symlink
+      file:
+        src: "{{ site_file }}"
+        dest: /etc/nginx/sites-enabled/default
+        state: link
+      become: yes
+    - name: copy the content of the web site
+      copy:
+        src: "{{ local_dir + '/static-site-src/' }}"
+        dest: /home/ansible/static-site
+      notify:
+        - restart_nginx
+  handlers:
+    - name: restart_nginx
+      service:
+        name: nginx
+        state: restarted
+      become: yes

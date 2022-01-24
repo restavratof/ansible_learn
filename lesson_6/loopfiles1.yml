@@ -1,0 +1,15 @@
+---
+- name: loop test 1
+  hosts: ansible1
+  vars:
+    my_files:
+      - file1
+      - file2
+      - file3
+  tasks:
+    - name: create some files
+      copy:
+        content: "{{ item }}"
+        dest: "/home/ansible/{{ item }}"
+      loop: "{{ my_files }}"
+

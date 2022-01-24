@@ -1,0 +1,11 @@
+---
+- name: multiple when demo
+  hosts: all
+  tasks:
+    - name: Create directory dir1
+      debug:
+        msg: "Creating dir1"
+      when: >
+        ( ansible_distribution == "Ubuntu" and ansible_memfree_mb > 512 )
+        or
+        ( ansible_distribution == "CentOS" and ansible_memfree_mb > 1024 )

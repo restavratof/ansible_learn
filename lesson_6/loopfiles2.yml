@@ -1,0 +1,13 @@
+---
+- name: create files using a loop - 2
+  hosts: ansible1
+  tasks:
+    - name: create files
+      copy:
+        content: "{{ item.content }}"
+        dest: "/home/ansible/{{ item.name }}"
+      loop:
+        - name: newfile1
+          content: new file content 1
+        - name: newfile2
+          content: new file content 2

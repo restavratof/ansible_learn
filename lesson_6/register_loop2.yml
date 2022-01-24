@@ -1,0 +1,11 @@
+---
+- name: register demo 2
+  hosts: ansible1
+  tasks:
+    - name: define register
+      shell: cat /etc/passwd
+      register: passwd_contents
+    - name: use register
+      debug:
+        msg: echo "passwd contains user lisa"
+      when: passwd_contents.stdout.find('lisa') != -1
