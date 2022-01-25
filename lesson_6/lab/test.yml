@@ -14,6 +14,9 @@
     - name: Set root password
       mysql_user:
         user=root
+        login_unix_socket=/var/run/mysqld/mysqld.sock
+        host=ansible2
         password="{{mysql_root_password}}"
-        host=localhost
+        priv="*.*:ALL,GRANT"
+        check_implicit_admin=true
       when: is_root_password_set.rc == 0
