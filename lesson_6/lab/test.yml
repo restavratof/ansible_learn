@@ -1,0 +1,19 @@
+---
+- name: test
+  hosts: db
+  vars:
+    mysql_root_password: "12345"
+  tasks:
+    - name: Is root password set?
+      command: mysql -u root --execute "SELECT NOW()"
+      register: is_root_password_set
+      ignore_errors: yes
+    - name: Inform user of mysql root password
+      debug:
+        msg: "DEFAULT PASSWORD: {{is_root_password_set}}"
+    - name: Set root password
+      mysql_user:
+        user=root
+        password="{{mysql_root_password}}"
+        host=localhost
+      when: is_root_password_set.rc == 0

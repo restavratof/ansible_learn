@@ -1,0 +1,16 @@
+---
+- name: uninstall mariadb
+  hosts: db
+  tasks:
+    - name: stop db
+      service:
+        name: mariadb
+        state: stopped
+      become: yes
+    - name: Uninstall db
+      apt:
+        name:
+          - mariadb-server
+          - python3-pymysql
+        state: absent
+      become: yes

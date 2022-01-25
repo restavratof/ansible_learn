@@ -20,7 +20,9 @@
           become: yes
           notify:
             - mariadb_root_psw
-      when: ansible_distribution == "Debian"
+      when:
+        - ansible_distribution == "Debian"
+        - ansible_distribution_version == "10"
   handlers:
     - name: mariadb_root_psw
       mysql_user:
