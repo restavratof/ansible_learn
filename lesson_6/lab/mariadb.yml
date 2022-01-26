@@ -11,7 +11,7 @@
             name:
               - mariadb-server
               - python3-pymysql
-            state: latest
+            state: present
           become: yes
         - name: start mariadb
           service:
@@ -26,9 +26,9 @@
   handlers:
     - name: mariadb_root_psw
       mysql_user:
-        login_user: root
-        login_password: "{{ mysql_root_password }}"
         user: root
+        login_unix_socket: /var/run/mysqld/mysqld.sock
+        host: ansible2
+        password: "{{mysql_root_password}}"
+        priv: "*.*:ALL,GRANT"
         check_implicit_admin: true
-        password: "{{ mysql_root_password }}"
-      become: yes

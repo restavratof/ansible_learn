@@ -1,0 +1,13 @@
+---
+- name: test ftp upload
+  hosts: localhost
+  tasks:
+  - name: install lftp
+    yum:
+      name: lftp
+  - name: upload file
+    shell: >
+      lftp <<EOF
+      open ansible3
+      put /etc/hosts
+      EOF

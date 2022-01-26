@@ -1,0 +1,22 @@
+---
+- name: show selinux
+  hosts: ansible3
+  tasks:
+    - name: install and set
+      block:
+      - name: install required packages
+        yum:
+          name: policycoreutils-python-utils
+          state: present
+      - name: set selinux context
+        sefcontext:
+          target: /tmp/removeme
+          setype: tmp_t
+          state: present
+        notify:
+          - run restorecon
+      when:
+        - ansible_distribution == "RedHat"
+  handlers:
+    - name: run restorecon
+      command: restorecon -v /tmp/removeme
