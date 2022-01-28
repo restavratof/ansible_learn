@@ -2,7 +2,7 @@
 - hosts: web
   force_handlers: True
   vars:
-    local_dir: /home/dfashch/PycharmProjects/ansible_learn/lesson_6
+    local_dir: /home/dfashch/PycharmProjects/ansible_learn/lesson_6_task_control
     site_file: /etc/nginx/sites-available/static_site.cfg
   tasks:
     - name: ensure nginx is at the latest version
