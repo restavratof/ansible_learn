@@ -131,3 +131,88 @@
 # b) Ansible Galaxy is a public website where community provided roles are offered
 # c) Before writing your own role, check Galaxy, you may get the roles from there
 # d) As easy-to-use search interface is available at galaxy.ansible.com
+# e) Role installation from galaxy:
+ansible-galaxy install geerlingguy.nginx
+
+
+
+# a) ansible-galaxy-search will search for roles
+#     - If an argument is rpovided, "ansible-galaxy" will search for this argument in the role description
+#     - Use options "--author", "--platforms" and "--galaxy-tags" to narrow down the search results
+#     - e.g. "ansible-galaxy search 'install mariadb' --platforms el"
+#             will search for mariadb that will run on enterprise linux.
+#
+# b) "ansible-galaxy info" provides information about roles
+#     - e.g. "ansible-galaxy info f500.mariadb55"
+#
+# c) "ansible-galaxy install" downloads a role and installs it in ~/.ansible/roles
+#    After download, these roles can be used in playbooks, like any other role.
+#
+# d) "ansible-galaxy list" shows installed roles
+# e) "ansible-galaxy remove" can be used to clean up and remove roles
+# f) "ansible-galaxy init" creates a directory structure that can be used to start developing your own role.
+#     - It interacts with the Ansible Galaxy website API
+#     - Use "--offline" to work offline
+#     - Specify username and role name as arguments
+#     - e.g. ansible-galaxy init --offline user.myrole
+
+# -------------------------------------------------------------------------------------------
+# --- Ansible Roles: Using a Requirements File
+# -------------------------------------------------------------------------------------------
+# a) "ansible-galaxy" can be used to install a list of roles based on definitions in a requirements file.
+# b) A requirements file is a yml file that defines a list of required roles that are specified using the "src" keyword.
+# c) The "src" keyword can contain the name of a role from Ansible Galaxy, or an URL to a custom location pointing to
+#    your own roles.
+# d) Create roles/requirements.txt in the projects directory to use it
+# e) Always specify the optional "version" attribute, to avoid getting surprises when a newer version of a role
+#    has become available.
+- src: file:///opt/local/roles/myrole.tar
+  name: myrole
+  version: 1.0
+
+# -------------------------------------------------------------------------------------------
+# --- Ansible Roles: Creating Custom Roles
+# -------------------------------------------------------------------------------------------
+# a) To create your own roles, use "ansible-galaxy init myrole" to create role directory structure
+# b) Mind the location of the directory structure, you can put it in the local project directory,
+#    or in a directory that is accessible for all projects
+# c) Populate the required role files as discussed before.
+
+# -------------------------------------------------------------------------------------------
+# --- Ansible Roles: BEST PRACTICES
+# -------------------------------------------------------------------------------------------
+# 1) Each role should have its own version control repository
+# 2) Dont't  put sensitive information in the role, but in the local playbooks or Ansible Vault instead.
+# 3) Use "ansible-galaxy init" to create the role structure
+# 4) Don't forget to edit the README.md and the meta/main.yml to contain documentation about your role.
+# 5) Roles should be dedicated to one/task function.
+# 6) Have a look at existing (Galaxy) roles before starting to write your own.
+
+# -------------------------------------------------------------------------------------------
+# --- Ansible Roles: Defining Role Dependencies
+# -------------------------------------------------------------------------------------------
+# a) The "meta/main.yml" can be used to define role dependencies
+# b) Dependencies listed here will be installed automatically when this role is used.
+
+# -------------------------------------------------------------------------------------------
+# --- Ansible Roles: Using Conditional Roles
+# -------------------------------------------------------------------------------------------
+# a) Conditional roles call a role dynamically, using "include_role" module
+#    - This makes it so conditional roles are treated more as tasks
+# b) Conditional Roles can be combined with conditional statements
+#    - This makes it so a role will only run if the conditional statement is true
+#    - Use "include_role" in a task statement to do so
+---
+- hosts: ansible1
+  tasks:
+  - include_role:
+      name: lamp
+    when: "ansible_facts['os_family'] == 'RedHat'"
+
+
+
+
+
+
+
+
